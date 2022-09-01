@@ -1,12 +1,36 @@
-import React, { lazy, useState } from "react";
+import React, { lazy, useCallback, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
 import { fpx, hpx, px } from "../../assets/customStyle/px";
 import { Colors } from "../../constants/colors";
+import { Place } from "../../models/place";
+import Button from "../UI/Button";
+import ImagePicker from "./ImagePicker";
+import LocationPicker, { IpickedLocation } from "./LocationPicker";
 
-const PlaceForm = () => {
+const PlaceForm = ({ onCreatePlace }: { onCreatePlace: (place: Place) => void }) => {
   const [enteredTitle, setEnteredTitle] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<string>();
+  const [pickedLocation, setPickedLocation] = useState<IpickedLocation>();
   const changedTitleHandler = (enteredText: string) => {
     setEnteredTitle(enteredText);
+  };
+
+  const takeImageHandler = (imageUri: string) => {
+    setSelectedImage(imageUri);
+  };
+
+  const pickLocationHandler = useCallback((location: IpickedLocation) => {
+    setPickedLocation(location);
+  }, []);
+
+  const savePlaceHandler = () => {
+    console.log("ENTER", enteredTitle, "TITLE");
+    console.log(selectedImage);
+    console.log(pickedLocation);
+    if (enteredTitle && selectedImage && pickedLocation) {
+      const placeData = new Place(enteredTitle, selectedImage, pickedLocation);
+      onCreatePlace(placeData);
+    }
   };
 
   return (
@@ -15,6 +39,9 @@ const PlaceForm = () => {
         <Text style={S.lavel}>Title</Text>
         <TextInput style={S.input} onChangeText={changedTitleHandler} value={enteredTitle} />
       </View>
+      <ImagePicker onTakeImage={takeImageHandler} />
+      <LocationPicker onPickLocation={pickLocationHandler} />
+      <Button onPress={savePlaceHandler}>Add Place</Button>
     </ScrollView>
   );
 };

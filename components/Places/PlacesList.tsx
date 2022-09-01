@@ -4,8 +4,8 @@ import { fpx } from "../../assets/customStyle/px";
 import { Colors } from "../../constants/colors";
 import PlaceItem from "./PlaceItem";
 
-interface IPlacesList {
-  places?: [
+export interface IPlacesList {
+  places: [
     {
       id: string;
       imageUri: string;
@@ -23,14 +23,10 @@ const PlacesList = ({ places }: IPlacesList) => {
       </View>
     );
   }
-  return (
-    <View style={S.fallbackContainer}>
-      <Text style={S.fallbackText}>No places added yet - start adding some!</Text>
-    </View>
-  );
 
   return (
     <FlatList
+      style={S.list}
       data={places}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <PlaceItem place={item} onSelect={() => null} />}
@@ -41,6 +37,9 @@ const PlacesList = ({ places }: IPlacesList) => {
 export default PlacesList;
 
 const S = StyleSheet.create({
+  list: {
+    margin: 24,
+  },
   fallbackContainer: {
     flex: 1,
     justifyContent: "center",

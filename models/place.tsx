@@ -1,14 +1,19 @@
+interface Ilocation {
+  address?: string;
+  lat: number;
+  lng: number;
+}
 export class Place {
   title: string;
   imageUri: string;
-  address: string;
-  location: string;
+  address: string|undefined;
+  location: { lat: number; lng: number };
   id: string;
-  constructor(title: string, imageUri: string, address: string, location: string) {
+  constructor(title: string, imageUri: string, location: Ilocation) {
     this.title = title;
     this.imageUri = imageUri;
-    this.address = address;
-    this.location = location;
+    this.address = location.address;
+    this.location = { lat: location.lat, lng: location.lng };
     this.id = new Date().toString() + Math.random().toString();
   }
 }
